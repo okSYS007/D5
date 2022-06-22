@@ -39,10 +39,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
+    'sign',
+    'protect',
 
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django_filters',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +78,11 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
@@ -118,7 +130,9 @@ USE_TZ = True
 
 SITE_ID = 1
 
-LOGIN_URL = '/news/'
+LOGIN_URL = '/accounts/login/'
+
+LOGIN_REDIRECT_URL = '/'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -130,3 +144,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}

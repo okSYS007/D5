@@ -6,7 +6,7 @@ from django.views import View
 from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
  
 class PostList(ListView):
 
@@ -53,15 +53,16 @@ class Search(View):
         }
         return render(request, 'search.html', data)
 
-class PostAdd(CreateView):
+class PostAdd(PermissionRequiredMixin, CreateView):
     template_name = 'add.html'
     form_class = PostForm
+    permission_required = ('myapp.add_post',)
 
-class PostEdit(LoginRequiredMixin, UpdateView):
-   
+class PostEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Post
     template_name = 'edit.html'
     form_class = PostForm
+    permission_required = ('myapp.change_post',)
 
 class PostDelete(DeleteView):
     model = Post
